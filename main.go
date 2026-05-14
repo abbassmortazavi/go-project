@@ -2,42 +2,27 @@ package main
 
 import (
 	"fmt"
-	"html/template"
-	"log"
+	"lense-code/views"
 	"net/http"
-	"path/filepath"
 
 	"github.com/go-chi/chi/v5"
 )
 
+func render(w http.ResponseWriter, name string) {
+	t, err := views.Parse(name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	t.ExecuteTemplate(w, nil)
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	path := filepath.Join("templates", "home.gohtml")
-	tmpl, err := template.ParseFiles(path)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
+	render(w, "home.gohtml")
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	path := filepath.Join("templates", "contact.gohtml")
-	tmpl, err := template.ParseFiles(path)
-	if err != nil {
-		fmt.Println(err)
-	}
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		return
-	}
+	render(w, "contact.gohtml")
 }
 
 func main() {
