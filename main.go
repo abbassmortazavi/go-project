@@ -2,44 +2,39 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
+	"path/filepath"
 
 	"github.com/go-chi/chi/v5"
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, "<h1>Hello Jafar!</h1>")
+	path := filepath.Join("templates", "home.gohtml")
+	tmpl, err := template.ParseFiles(path)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		return
+	}
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, "<h1>Contact Page</h1>")
-}
-
-//func pathHandler(w http.ResponseWriter, r *http.Request) {
-//	switch r.URL.Path {
-//	case "/":
-//		homeHandler(w, r)
-//	case "/contact":
-//		contactHandler(w, r)
-//	default:
-//		http.Error(w, "404 not found.", http.StatusNotFound)
-//	}
-//}
-
-type Router struct{}
-
-func (router Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.URL.Path {
-	case "/":
-		homeHandler(w, r)
-	case "/contact":
-		contactHandler(w, r)
-	default:
-		http.Error(w, "404 not found.", http.StatusNotFound)
+	path := filepath.Join("templates", "contact.gohtml")
+	tmpl, err := template.ParseFiles(path)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		return
 	}
 }
+
 func main() {
 	r := chi.NewRouter()
 	r.Get("/", homeHandler)
