@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"path/filepath"
 
@@ -14,10 +15,14 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	path := filepath.Join("templates", "home.gohtml")
 	tmpl, err := template.ParseFiles(path)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
 	}
 	err = tmpl.Execute(w, nil)
 	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 }
