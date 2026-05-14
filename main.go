@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -39,9 +41,12 @@ func (router Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func main() {
-	var router Router
+	r := chi.NewRouter()
+	r.Get("/", homeHandler)
+	r.Get("/contact", contactHandler)
+
 	fmt.Println("Listening on port 8080")
-	err := http.ListenAndServe(":8080", router)
+	err := http.ListenAndServe(":8080", r)
 	if err != nil {
 		return
 	}
