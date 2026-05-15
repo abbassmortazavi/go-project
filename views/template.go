@@ -12,6 +12,13 @@ type Template struct {
 	templates *template.Template
 }
 
+func Must(t Template, err error) Template {
+	if err != nil {
+		panic(err)
+	}
+	return t
+}
+
 func Parse(filename string) (Template, error) {
 	path := filepath.Join("templates", filename)
 	tmpl, err := template.ParseFiles(path)

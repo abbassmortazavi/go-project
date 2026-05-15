@@ -20,24 +20,18 @@ func render(w http.ResponseWriter, name string) {
 
 func main() {
 	r := chi.NewRouter()
-	tpl, err := views.Parse("home.gohtml")
-	if err != nil {
-		panic(err)
-	}
+	tpl := views.Must(views.Parse("home.gohtml"))
 	r.Get("/", controllers.StaticHandler(tpl))
 
-	tplContact, err := views.Parse("contact.gohtml")
-	if err != nil {
-		panic(err)
-	}
+	tplContact := views.Must(views.Parse("contact.gohtml"))
 	r.Get("/contact", controllers.StaticHandler(tplContact))
 
 	fmt.Println("Listening on port 8080")
-	err = http.ListenAndServe(":8080", r)
+	err := http.ListenAndServe(":8080", r)
 	if err != nil {
 		return
 	}
 
 }
 
-//watch till section 41 finished
+//watch till section 44 finished
