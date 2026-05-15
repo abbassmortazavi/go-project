@@ -31,8 +31,8 @@ func Parse(filename string) (Template, error) {
 	}, err
 }
 
-func ParseFS(fs fs.FS, pattern string) (Template, error) {
-	tmpl, err := template.ParseFS(fs, pattern)
+func ParseFS(fs fs.FS, pattern ...string) (Template, error) {
+	tmpl, err := template.ParseFS(fs, pattern...)
 	if err != nil {
 		return Template{}, fmt.Errorf("template parsing error: %w", err)
 	}
