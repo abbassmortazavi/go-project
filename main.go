@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"lense-code/controllers"
+	"lense-code/templates"
 	"lense-code/views"
 	"net/http"
 
@@ -20,10 +21,11 @@ func render(w http.ResponseWriter, name string) {
 
 func main() {
 	r := chi.NewRouter()
-	tpl := views.Must(views.Parse("home.gohtml"))
+	//tpl := views.Must(views.Parse("home.gohtml"))
+	tpl := views.Must(views.ParseFS(templates.FS, "home.gohtml"))
 	r.Get("/", controllers.StaticHandler(tpl))
 
-	tplContact := views.Must(views.Parse("contact.gohtml"))
+	tplContact := views.Must(views.ParseFS(templates.FS, "contact.gohtml"))
 	r.Get("/contact", controllers.StaticHandler(tplContact))
 
 	fmt.Println("Listening on port 8080")
