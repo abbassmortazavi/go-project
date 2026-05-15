@@ -43,7 +43,7 @@ func ParseFS(fs fs.FS, pattern ...string) (Template, error) {
 
 func (t *Template) ExecuteTemplate(w http.ResponseWriter, data interface{}) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err := t.templates.Execute(w, nil)
+	err := t.templates.Execute(w, data)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
