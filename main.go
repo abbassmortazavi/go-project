@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"lense-code/controllers"
 	"lense-code/views"
 	"net/http"
 
@@ -17,21 +18,22 @@ func render(w http.ResponseWriter, name string) {
 	t.ExecuteTemplate(w, nil)
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	render(w, "home.gohtml")
-}
-
-func contactHandler(w http.ResponseWriter, r *http.Request) {
-	render(w, "contact.gohtml")
-}
-
 func main() {
 	r := chi.NewRouter()
-	r.Get("/", homeHandler)
-	r.Get("/contact", contactHandler)
+	tpl, err := views.Parse("home.gohtml")
+	if err != nil {
+		panic(err)
+	}
+	r.Get("/", controllers.StaticHandler(tpl))
+
+	tplContact, err := views.Parse("contact.gohtml")
+	if err != nil {
+		panic(err)
+	}
+	r.Get("/contact", controllers.StaticHandler(tplContact))
 
 	fmt.Println("Listening on port 8080")
-	err := http.ListenAndServe(":8080", r)
+	err = http.ListenAndServe(":8080", r)
 	if err != nil {
 		return
 	}
