@@ -1,8 +1,24 @@
 {{template "header" .}}
-<h1 class="text-3xl font-bold text-red-500 underline">
-  Hello world!
-</h1>
+<div class="px-6">
+  <h1 class="py-4 text-3xl font-bold text-blue-500 tracking-tight">
+    Hello world!
+  </h1>
+  <ul class="disc list-disc space-y-2">
+    {{range .}}
+      {{template "content" .}}
+    {{end}}
+  </ul>
+</div>
+
 {{template "footer" .}}
+
+
+{{define "content"}}
+  <li class="question-answer">
+    <b>{{.Title}}</b>
+    {{.Content}}
+  </li>
+{{end}}
 
 
 
