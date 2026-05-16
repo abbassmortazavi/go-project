@@ -28,6 +28,9 @@ func main() {
 	tplContact := views.Must(views.ParseFS(templates.FS, "contact.gohtml", "tailwind.gohtml"))
 	r.Get("/contact", controllers.StaticHandler(tplContact))
 
+	tplSignUp := views.Must(views.ParseFS(templates.FS, "signup.gohtml", "tailwind.gohtml"))
+	r.Get("/sign-up", controllers.StaticHandler(tplSignUp))
+
 	fmt.Println("Listening on port 8080")
 	err := http.ListenAndServe(":8080", r)
 	if err != nil {
