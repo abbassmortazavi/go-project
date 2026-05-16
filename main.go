@@ -2,50 +2,38 @@ package main
 
 import (
 	"fmt"
+	"lense-code/controllers"
+	"lense-code/templates"
+	"lense-code/views"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, "<h1>Hello Jafar!</h1>")
-}
-
-func contactHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, "<h1>Contact Page</h1>")
-}
-
-//func pathHandler(w http.ResponseWriter, r *http.Request) {
-//	switch r.URL.Path {
-//	case "/":
-//		homeHandler(w, r)
-//	case "/contact":
-//		contactHandler(w, r)
-//	default:
-//		http.Error(w, "404 not found.", http.StatusNotFound)
-//	}
-//}
-
-type Router struct{}
-
-func (router Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.URL.Path {
-	case "/":
-		homeHandler(w, r)
-	case "/contact":
-		contactHandler(w, r)
-	default:
-		http.Error(w, "404 not found.", http.StatusNotFound)
+func render(w http.ResponseWriter, name string) {
+	t, err := views.Parse(name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
+	t.ExecuteTemplate(w, nil)
 }
+
 func main() {
-	var router Router
+	r := chi.NewRouter()
+	//tpl := views.Must(views.Parse("home.gohtml"))
+	tpl := views.Must(views.ParseFS(templates.FS, "home.gohtml", "tailwind.gohtml"))
+	r.Get("/", controllers.Home(tpl))
+
+	tplContact := views.Must(views.ParseFS(templates.FS, "contact.gohtml", "tailwind.gohtml"))
+	r.Get("/contact", controllers.StaticHandler(tplContact))
+
 	fmt.Println("Listening on port 8080")
-	err := http.ListenAndServe(":8080", router)
+	err := http.ListenAndServe(":8080", r)
 	if err != nil {
 		return
 	}
 
 }
 
-//watch till section 15 finished
+//watch till section 51 intsall tailwind
