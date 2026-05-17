@@ -29,6 +29,7 @@ func main() {
 
 	usersC := controllers.Users{}
 	r.Get("/users/new", usersC.New)
+	r.Post("/users", usersC.Create)
 
 	fmt.Println("Listening on port 8080")
 	err := http.ListenAndServe(":8080", r)
