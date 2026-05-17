@@ -21,15 +21,14 @@ func render(w http.ResponseWriter, name string) {
 
 func main() {
 	r := chi.NewRouter()
-	//tpl := views.Must(views.Parse("home.gohtml"))
 	tpl := views.Must(views.ParseFS(templates.FS, "home.gohtml", "tailwind.gohtml"))
 	r.Get("/", controllers.Home(tpl))
 
 	tplContact := views.Must(views.ParseFS(templates.FS, "contact.gohtml", "tailwind.gohtml"))
 	r.Get("/contact", controllers.StaticHandler(tplContact))
 
-	tplSignUp := views.Must(views.ParseFS(templates.FS, "signup.gohtml", "tailwind.gohtml"))
-	r.Get("/sign-up", controllers.StaticHandler(tplSignUp))
+	usersC := controllers.Users{}
+	r.Get("/users/new", usersC.New)
 
 	fmt.Println("Listening on port 8080")
 	err := http.ListenAndServe(":8080", r)
