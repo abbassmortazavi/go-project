@@ -41,4 +41,23 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println("Connected to database")
+
+	_, err = db.Exec(`
+
+		CREATE TABLE IF NOT EXISTS users (
+			id serial PRIMARY KEY,
+			email VARCHAR(255) UNIQUE NOT NULL
+			);
+		create table if not exists orders (
+			id serial PRIMARY KEY,
+			user_id integer NOT NULL,
+			amount integer NOT NULL,
+			description text NOT NULL
+		);
+
+`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("created table")
 }
